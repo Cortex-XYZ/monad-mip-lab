@@ -24,7 +24,7 @@ MIP-N/
 
 - **All code lives under `examples/`.** Each example is a self-contained project folder named for what it does (e.g. `MIP-4/examples/reserve-probes/`), with its own toolchain config and dependencies. Different examples may use different frameworks (Foundry, Hardhat, viem/TS, …) and pin dependencies independently.
 - **Secrets are per-MIP.** Keystore passwords, deployed addresses, and env files live in `MIP-N/.secrets/`, which is gitignored. Experiment scripts resolve paths relative to their MIP folder.
-- **Monad Foundry.** Foundry-based examples that exercise Monad-specific behavior (such as the `0x1001` reserve-balance precompile) require the Monad fork of Foundry; standard Foundry cannot simulate the precompile. CI pins `v1.7.1-monad-v1.0.0` because the reserve tracker did not populate in the repo's recorded 1.5.0 regression.
+- **Monad Foundry.** Foundry-based examples that exercise Monad-specific behavior (such as the `0x1001` reserve-balance precompile) require the Monad fork of Foundry; standard Foundry cannot simulate the precompile. CI pins `v1.7.1-monad-v1.0.0`, the release and configuration used by the passing reserve-tracker regression.
 
 ## Research Workflow
 

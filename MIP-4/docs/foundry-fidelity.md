@@ -2,7 +2,7 @@
 
 ## Answer
 
-Monad Foundry v1.7.1 reproduces the MIP-4 reserve tracker inside `forge test`. The earlier local/Testnet divergence came from testing with `1.5.0-stable-monad`, not from an inherent Forge limitation.
+Monad Foundry v1.7.1 reproduces the MIP-4 reserve tracker inside `forge test` when the project uses Monad execution, Prague, and isolated test transactions. The earlier `1.5.0-stable-monad` record used a different project configuration, so these experiments do not isolate the old local/Testnet divergence to the toolchain version alone. The passing v1.7.1 regression does establish that reserve tracking is not an inherent Forge limitation.
 
 The repo-local regression uses `vm.signAndAttachDelegation()` with an EIP-7702 delegated EOA funded before each isolated test transaction:
 
@@ -11,7 +11,7 @@ The repo-local regression uses `vm.signAndAttachDelegation()` with an EIP-7702 d
 11 MON -> 9 MON -> 11 MON   false -> true -> false
 ```
 
-Both cases pass on `v1.7.1-monad-v1.0.0`. The same experiment on `1.5.0-stable-monad` returned `false` throughout. The toolchain version is therefore part of the experiment definition.
+Both cases pass on `v1.7.1-monad-v1.0.0`. The earlier recorded experiment on `1.5.0-stable-monad` returned `false` throughout, but it also used a different project configuration. The toolchain version and project configuration are therefore part of the experiment definition.
 
 ## Compatibility Table
 
@@ -46,7 +46,7 @@ The `mip4-sca` project adds an unmocked guarded-account regression and an 18-cas
 
 - A real type-4 transaction is not required merely to reproduce reserve tracking locally.
 - Protocol-created delegation is not required for the tested Forge observation; cheatcode-created delegation is sufficient on v1.7.1.
-- The old `false -> false` result remains useful as a version-specific regression record, but it no longer describes the current local workflow.
+- The old `false -> false` result remains useful as a historical measurement of its recorded toolchain and project configuration, but it no longer describes the current local workflow.
 
 ## Remaining Boundaries
 

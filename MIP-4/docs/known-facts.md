@@ -14,7 +14,7 @@ Per-claim status labels and citations are consolidated in [MIP-4 semantics revie
 - Solidity contracts in this repo can call the precompile.
 - Monad Foundry v1.7.1 can simulate the MIP-4 precompile, EIP-7702 delegated execution routing, and reserve-balance violation tracking in isolated Forge tests.
 - In the repo-local `vm.signAndAttachDelegation()` regression, an EIP-7702 delegated EOA moving from 11 MON to 9 MON produced `false -> true`; restoring it to 11 MON produced `false -> true -> false`.
-- The older `1.5.0-stable-monad` release returned `false` throughout the same local balance transitions. This is a historical, version-specific result.
+- The recorded `1.5.0-stable-monad` setup returned `false` throughout the same local balance transitions. This historical result also used a different project configuration, so the version alone is not an established cause.
 - A real Monad Testnet EIP-7702 authorization-list transaction produced `dippedIntoReserve() == true` while a protocol-created delegated EOA moved from 19 MON to 9 MON during execution and returned to 19 MON afterward.
 - In the same sponsor-submitted Testnet authorization-list path, moving from 19 MON to exactly 10 MON produced `lastDuringDip = false`.
 - In the same sponsor-submitted Testnet authorization-list path, moving from 19 MON to 10 MON minus 1 wei produced `lastDuringDip = true`.

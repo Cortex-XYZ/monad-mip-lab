@@ -140,7 +140,7 @@ Result:
 
 Conclusion:
 
-Monad Foundry includes Monad-specific execution behavior and exposes the MIP-4 precompile. Reserve-tracker behavior is tested separately below because it changed between the measured 1.5.0 and 1.7.1 releases.
+Monad Foundry includes Monad-specific execution behavior and exposes the MIP-4 precompile. Reserve-tracker behavior is tested separately below because the recorded 1.5.0 and 1.7.1 setups produced different results.
 
 Source: [Monad Foundry documentation](https://docs.monad.xyz/tooling-and-infra/toolkits/monad-foundry)
 
@@ -217,7 +217,7 @@ Final below-reserve no-restore:
 
 ### Conclusion
 
-On `1.5.0-stable-monad`, `vm.signAndAttachDelegation` reproduced EIP-7702 code routing but did not populate the reserve tracker in these Forge tests. This result is retained as a version-specific regression record. It does not describe Monad Foundry v1.7.1.
+On `1.5.0-stable-monad`, `vm.signAndAttachDelegation` reproduced EIP-7702 code routing but did not populate the reserve tracker in these Forge tests. This result is retained as a historical measurement of that toolchain and project configuration. It does not describe the tested Monad Foundry v1.7.1 setup.
 
 ## Monad Foundry v1.7.1 reserve tracking
 
@@ -247,7 +247,7 @@ Both tests passed in [`examples/reserve-probes/test/DelegatedDrain.t.sol`](../ex
 
 ### Conclusion
 
-Monad Foundry v1.7.1 populates the reserve tracker in `forge test`. A real type-4 transaction and protocol-created delegation are not required for this tested observation. The old local/Testnet divergence was caused by the tested Monad Foundry version.
+Monad Foundry v1.7.1 with `network = "monad"`, `evm_version = "prague"`, and `isolate = true` populates the reserve tracker in `forge test`. A real type-4 transaction and protocol-created delegation are not required for this tested observation. The 1.5.0 record used a different project configuration, so these experiments do not isolate the old local/Testnet divergence to the toolchain version alone.
 
 ## First verified dippedIntoReserve() == true
 
@@ -286,7 +286,7 @@ This is the first verified `dippedIntoReserve() == true`.
 
 A protocol-created EIP-7702 delegated EOA whose balance is decremented from above 10 MON to below 10 MON during transaction execution causes `dippedIntoReserve()` to return true.
 
-Monad Foundry 1.5.0 did not reproduce this state transition at the time of the original Testnet comparison. Monad Foundry v1.7.1 now reproduces it with cheatcode-created delegation, so the original difference was version-specific.
+The recorded Monad Foundry 1.5.0 setup did not reproduce this state transition at the time of the original Testnet comparison. Monad Foundry v1.7.1 now reproduces it with cheatcode-created delegation. Because the two records also differ in project configuration, they do not establish which individual change produced the different result.
 
 ### Remaining open question
 

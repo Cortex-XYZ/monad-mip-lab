@@ -75,6 +75,7 @@ contract Mip4ReserveGuardTest is Test {
 
     function test_guardedCall_newDip_revertsAndUnwinds() public {
         _mockDipSequence(false, true);
+        vm.expectCall(MIP4, abi.encodePacked(DIPPED_INTO_RESERVE));
 
         vm.expectRevert(Mip4ReserveGuard.ReserveDipped.selector);
         _guarded().doGuarded(recipient, 1 ether, "");
@@ -85,29 +86,32 @@ contract Mip4ReserveGuardTest is Test {
 
     function test_guardedCall_preExistingDip_succeeds() public {
         _mockDipSequence(true, true);
+        vm.expectCall(MIP4, abi.encodePacked(DIPPED_INTO_RESERVE));
 
-        _guarded().doGuarded(recipient, 0.1 ether, "");
+        _guarded().doGuarded(recipient, 1 ether, "");
 
-        assertEq(eoaGuarded.balance, 10.4 ether);
-        assertEq(recipient.balance, 0.1 ether);
+        assertEq(eoaGuarded.balance, 9.5 ether);
+        assertEq(recipient.balance, 1 ether);
     }
 
     function test_guardedCall_noDip_succeeds() public {
         _mockDipSequence(false, false);
+        vm.expectCall(MIP4, abi.encodePacked(DIPPED_INTO_RESERVE));
 
-        _guarded().doGuarded(recipient, 0.1 ether, "");
+        _guarded().doGuarded(recipient, 1 ether, "");
 
-        assertEq(eoaGuarded.balance, 10.4 ether);
-        assertEq(recipient.balance, 0.1 ether);
+        assertEq(eoaGuarded.balance, 9.5 ether);
+        assertEq(recipient.balance, 1 ether);
     }
 
     function test_guardedCall_precompileUnavailable_isNoOp() public {
         vm.mockCallRevert(MIP4, DIPPED_INTO_RESERVE, "precompile unavailable");
+        vm.expectCall(MIP4, abi.encodePacked(DIPPED_INTO_RESERVE));
 
-        _guarded().doGuarded(recipient, 0.1 ether, "");
+        _guarded().doGuarded(recipient, 1 ether, "");
 
-        assertEq(eoaGuarded.balance, 10.4 ether);
-        assertEq(recipient.balance, 0.1 ether);
+        assertEq(eoaGuarded.balance, 9.5 ether);
+        assertEq(recipient.balance, 1 ether);
     }
 
     function test_contractAccount_guardDoesNotInterfere() public {

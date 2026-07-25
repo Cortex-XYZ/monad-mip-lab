@@ -15,7 +15,7 @@ Matrix rows are cited by row name from [semantics.md](semantics.md); keep row na
 - In a below-reserve Testnet path, a delegated EOA starting at 9 MON and remaining unchanged succeeded with `false -> false -> false`.
 - In a below-reserve Testnet path, a delegated EOA starting at 9 MON and decrementing to 8 MON reverted. Because the transaction reverted, checkpoint writes and logs did not persist; the verified observation is the failed transaction outcome, not a persisted `duringDip = true` value.
 - Monad Foundry v1.7.1 reproduces reserve tracking with `vm.signAndAttachDelegation()`: no-restore returns `false -> true`, while drain-restore returns `false -> true -> false`.
-- The older `1.5.0-stable-monad` release returned `false` throughout the same local transitions. That row is retained as a historical version regression.
+- The recorded `1.5.0-stable-monad` setup returned `false` throughout the same balance transitions. That row is retained as a historical result for its toolchain and project configuration, not as proof that the version alone caused the difference.
 - The Testnet transition above is a verified sufficient condition, not a complete description of the state machine.
 
 ## Observation Matrix
