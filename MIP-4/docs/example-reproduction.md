@@ -77,23 +77,12 @@ On Monad, that containment breaks when a UserOp leaves a touched EOA in reserve 
 
 | Tool | Required for | Install |
 | --- | --- | --- |
-| Monad Foundry (`forge`, `cast`) | All examples | `foundryup --network monad` |
+| Monad Foundry (`forge`, `cast`) | All examples | https://docs.monad.xyz/tooling-and-infra/toolkits/monad-foundry |
 | Node.js ≥ 20 | Example 3 (TypeScript demo) | https://nodejs.org |
 | Python 3 | Example 2 script (math helpers) | https://python.org |
 | Git | Cloning this repository | https://git-scm.com |
 
-All examples in this guide target Monad Testnet. Monad Foundry is required for `forge` and `cast` commands throughout. Install it with:
-
-```bash
-foundryup --network monad
-```
-
-Confirm it is active before running any command:
-
-```bash
-forge --version
-# should show: forge Version: x.x.x-stable-monad
-```
+All examples in this guide target Monad Testnet. Monad Foundry is required for `forge` and `cast` commands throughout.
 
 ---
 
@@ -112,12 +101,12 @@ The scripts in this repository resolve private keys and deployed addresses from 
 
 ```bash
 cat > MIP-4/.env << 'EOF'
-MONAD_RPC_URL="https://testnet-rpc.monad.xyz"
-SPONSOR_PRIVATE_KEY="0xYOUR_MAIN_WALLET_PRIVATE_KEY"
-AUTHORITY="0xYOUR_SECOND_WALLET_ADDRESS"
-AUTHORITY_PRIVATE_KEY="0xYOUR_SECOND_WALLET_PRIVATE_KEY"
-TESTNET_DELEGATED_PROBE="0x<deployed address from this repo>"
-TESTNET_REFUND_SINK="0x<deployed address from this repo>"
+export MONAD_RPC_URL="https://testnet-rpc.monad.xyz"
+export SPONSOR_PRIVATE_KEY="0xYOUR_MAIN_WALLET_PRIVATE_KEY"
+export AUTHORITY="0xYOUR_SECOND_WALLET_ADDRESS"
+export AUTHORITY_PRIVATE_KEY="0xYOUR_SECOND_WALLET_PRIVATE_KEY"
+export TESTNET_DELEGATED_PROBE="0x<deployed address from this repo>"
+export TESTNET_REFUND_SINK="0x<deployed address from this repo>"
 EOF
 ```
 
@@ -133,7 +122,7 @@ source MIP-4/.env
 
 | Example | Minimum MON needed |
 | --- | --- |
-| Example 1 | ~0.5 MON (gas only) |
+| Example 1 | Any MON amount as long as the 2nd tx ends < 10 MON |
 | Example 2 | ~13 MON in second wallet, ~1 MON in main wallet for gas |
 | Example 3 | ~35 MON across both wallets |
 
@@ -173,7 +162,7 @@ cast nonce $SPONSOR_ADDRESS --rpc-url "$MONAD_RPC_URL"
 
 ### Run
 
-Replace `YOURNONCE` with the result of the nonce check. Transaction 1 burns the emptying exception. Transaction 2 sends enough MON to drop below 10 MON.
+Replace `YOURNONCE` with the result of the nonce check. Transaction 1 burns the emptying exception. Transaction 2 sends enough MON to drop below 10 MON. Make sure both tx's are within 3 blocks otherwise there will be no reserve balance violation.
 
 ```bash
 cast send $AUTHORITY \
@@ -181,12 +170,16 @@ cast send $AUTHORITY \
   --nonce YOURNONCE \
   --rpc-url "$MONAD_RPC_URL" \
   --private-key "$SPONSOR_PRIVATE_KEY" \
-  --async \
-&& cast send $AUTHORITY \
+  --async &
+
+cast send $AUTHORITY \
   --value 2ether \
   --nonce $((YOURNONCE + 1)) \
   --rpc-url "$MONAD_RPC_URL" \
-  --private-key "$SPONSOR_PRIVATE_KEY"
+  --private-key "$SPONSOR_PRIVATE_KEY" \
+  --async &
+
+wait
 ```
 
 ### Expected result
@@ -366,7 +359,9 @@ Fill in `FUNDER_KEY` with your main wallet private key. Leave `MIP4_ACCOUNT_IMPL
 **Install demo dependencies:**
 
 ```bash
-cd demo && npm install && cd ..
+cd demo
+npm install
+cd ..
 ```
 
 **Deploy `Mip4Account` implementation:**
