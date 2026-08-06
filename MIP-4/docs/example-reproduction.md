@@ -82,6 +82,8 @@ On Monad, that containment breaks when a UserOp leaves a touched EOA in reserve 
 | Python 3 | Example 2 script (math helpers) | https://python.org |
 | Git | Cloning this repository | https://git-scm.com |
 
+ *NOTICE: If you have standard Foundry already installed, Monad Foundry will overwrite the foundry version on your machine. If this is the case, make sure to install Monad Foundry at a different location.
+
 All examples in this guide target Monad Testnet. Monad Foundry is required for `forge` and `cast` commands throughout.
 
 ---
